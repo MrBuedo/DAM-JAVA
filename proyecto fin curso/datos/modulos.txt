@@ -1,0 +1,10 @@
+1;1;Lenguajes de marcas;primero;6;240;
+2;1;Acceso a datos;segundo;6;240;
+3;1;Mobile development;segundo;6;240;
+4;2;Fundamentos de peluqueria;primero;6;240;
+5;2;Practicas de peluqueria;primero;6;240;
+6;2;Estetica;primero;6;240;
+7;2;Tintes;segundo;6;240;
+8;2;Fundamentos de uñas;segundo;6;240;
+9;3;Programacion;primero;6;240;
+10;3;Bases de datos 2;segundo;6;240;

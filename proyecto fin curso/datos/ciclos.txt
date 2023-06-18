@@ -1,0 +1,4 @@
+1;DAM;Informática;superior;2000;2011;
+2;Peluquería;Imagen Personal;medio;2000;2017;
+3;DAW;Informática;superior;2000;2011;
+4;Audiovisuales;Imagen y sonido;superior;2000;2013;

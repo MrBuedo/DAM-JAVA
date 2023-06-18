@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/Users/Usuario/OneDrive/Escritorio/centroFormativo/db/DB_CentroFormativo.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="125"/><column_width id="3" width="3642"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,6:mainalumno"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="alumno" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="68"/><column index="2" value="131"/><column index="3" value="163"/><column index="4" value="214"/><column index="5" value="82"/><column index="6" value="235"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="ciclo" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="68"/><column index="2" value="131"/><column index="3" value="176"/><column index="4" value="67"/><column index="5" value="58"/><column index="6" value="128"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="linea_matricula" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="159"/><column index="2" value="144"/><column index="3" value="96"/><column index="4" value="183"/><column index="5" value="190"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="matricula" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="68"/><column index="2" value="143"/><column index="3" value="144"/><column index="4" value="75"/><column index="5" value="77"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="modulo" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="68"/><column index="2" value="118"/><column index="3" value="212"/><column index="4" value="69"/><column index="6" value="58"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1">BEGIN TRANSACTION;
+CREATE TABLE IF NOT EXISTS &quot;ciclo&quot; (
+	&quot;codigo&quot;	INTEGER NOT NULL,
+	&quot;denominacion&quot;	TEXT NOT NULL,
+	&quot;familia_profesional&quot;	TEXT NOT NULL,
+	&quot;nivel&quot;	TEXT NOT NULL CHECK(&quot;nivel&quot; IN ('basico', 'medio', 'superior')),
+	&quot;horas&quot;	INTEGER NOT NULL,
+	&quot;año_curriculo&quot;	INTEGER NOT NULL,
+	PRIMARY KEY(&quot;codigo&quot;)
+);
+CREATE TABLE IF NOT EXISTS &quot;modulo&quot; (
+	&quot;codigo&quot;	INTEGER NOT NULL,
+	&quot;codigo_ciclo&quot;	INTEGER NOT NULL,
+	&quot;nombre&quot;	TEXT NOT NULL,
+	&quot;curso&quot;	TEXT NOT NULL CHECK(&quot;curso&quot; IN ('primero', 'segundo')),
+	&quot;creditos_ects&quot;	INTEGER NOT NULL,
+	&quot;horas&quot;	INTEGER NOT NULL,
+	PRIMARY KEY(&quot;codigo&quot;)
+);
+CREATE TABLE IF NOT EXISTS &quot;alumno&quot; (
+	&quot;codigo&quot;	INTEGER NOT NULL,
+	&quot;nombre&quot;	TEXT NOT NULL,
+	&quot;fecha_nacimiento&quot;	TEXT NOT NULL,
+	&quot;domicilio&quot;	TEXT NOT NULL,
+	&quot;telefono&quot;	TEXT NOT NULL,
+	&quot;correo&quot;	TEXT NOT NULL,
+	PRIMARY KEY(&quot;codigo&quot;)
+);
+CREATE TABLE IF NOT EXISTS &quot;linea_matricula&quot; (
+	&quot;codigo_matricula&quot;	INTEGER NOT NULL,
+	&quot;codigo_modulo&quot;	INTEGER NOT NULL,
+	&quot;repeticion&quot;	INTEGER NOT NULL,
+	&quot;calificacion_primera&quot;	REAL NOT NULL,
+	&quot;calificacio_segunda&quot;	REAL NOT NULL,
+	&quot;Field6&quot;	INTEGER,
+	FOREIGN KEY(&quot;codigo_matricula&quot;) REFERENCES &quot;matricula&quot;(&quot;codigo&quot;) ON DELETE CASCADE,
+	FOREIGN KEY(&quot;codigo_modulo&quot;) REFERENCES &quot;modulo&quot;(&quot;codigo&quot;) ON DELETE CASCADE,
+	PRIMARY KEY(&quot;codigo_matricula&quot;,&quot;codigo_modulo&quot;)
+);
+CREATE TABLE IF NOT EXISTS &quot;matricula&quot; (
+	&quot;codigo&quot;	INTEGER NOT NULL,
+	&quot;codigo_alumno&quot;	INTEGER NOT NULL UNIQUE,
+	&quot;año_academico&quot;	INTEGER NOT NULL,
+	&quot;estado&quot;	TEXT NOT NULL CHECK(&quot;estado&quot; IN ('parcial', 'completa', 'anulada')),
+	&quot;importe&quot;	REAL NOT NULL,
+	UNIQUE(&quot;codigo_alumno&quot;,&quot;año_academico&quot;),
+	PRIMARY KEY(&quot;codigo&quot;)
+);
+INSERT INTO &quot;ciclo&quot; VALUES (1,'DAM','Informática','superior',2000,2011);
+INSERT INTO &quot;ciclo&quot; VALUES (2,'Peluquería','Imagen Personal','medio',2000,2017);
+INSERT INTO &quot;ciclo&quot; VALUES (3,'DAW','Informática','superior',2000,2011);
+INSERT INTO &quot;ciclo&quot; VALUES (4,'Audiovisuales','Imagen y sonido','superior',2000,2013);
+INSERT INTO &quot;modulo&quot; VALUES (1,1,'Lenguajes de marcas','primero',6,240);
+INSERT INTO &quot;modulo&quot; VALUES (2,1,'Acceso a datos','segundo',6,240);
+INSERT INTO &quot;modulo&quot; VALUES (3,1,'Mobile development','segundo',6,240);
+INSERT INTO &quot;modulo&quot; VALUES (4,2,'Fundamentos de peluqueria','primero',6,240);
+INSERT INTO &quot;modulo&quot; VALUES (5,2,'Practicas de peluqueria','primero',6,240);
+INSERT INTO &quot;modulo&quot; VALUES (6,2,'Estetica','primero',6,240);
+INSERT INTO &quot;modulo&quot; VALUES (7,2,'Tintes','segundo',6,240);
+INSERT INTO &quot;modulo&quot; VALUES (8,2,'Fundamentos de uñas','segundo',6,240);
+INSERT INTO &quot;modulo&quot; VALUES (9,3,'Programacion','primero',6,240);
+INSERT INTO &quot;modulo&quot; VALUES (10,3,'Bases de datos 2','segundo',6,240);
+INSERT INTO &quot;alumno&quot; VALUES (1,'Juan Perez','1999-03-12','Calle 123, Ciudad de Mexico','555-1234','juanperez@example.com');
+INSERT INTO &quot;alumno&quot; VALUES (2,'Maria Garcia','2000-05-21','Avenida 456, Guadalajara','333-5678','mariagarcia@example.com');
+INSERT INTO &quot;alumno&quot; VALUES (3,'Pedro Lopez','1998-11-05','Colonia 789, Monterrey','444-9012','pedrolopez@example.com');
+INSERT INTO &quot;alumno&quot; VALUES (4,'Luisa Ramirez','1997-08-27','Calle 321, Puebla','222-3456','luisaramirez@example.com');
+INSERT INTO &quot;alumno&quot; VALUES (5,'Jorge Hernandez','1996-02-09','Avenida 654, Cancun','998-7890','jorgehernandez@example.com');
+INSERT INTO &quot;alumno&quot; VALUES (6,'Ana Torres','1995-10-17','Colonia 987, Tijuana','664-1234','anatorres@example.com');
+INSERT INTO &quot;alumno&quot; VALUES (7,'Roberto Gomez','1994-12-25','Calle 456, Acapulco','744-5678','robertogomez@example.com');
+INSERT INTO &quot;alumno&quot; VALUES (8,'Sofia Martinez','1993-06-29','Avenida 789, Oaxaca','951-9012','sofiamartinez@example.com');
+INSERT INTO &quot;alumno&quot; VALUES (9,'Diego Castro','1992-09-08','Colonia 123, Veracruz','229-3456','diegocastro@example.com');
+INSERT INTO &quot;alumno&quot; VALUES (10,'Laura Rodriguez','1991-04-15','Calle 789, Toluca','722-7890','laurarodriguez@example.com');
+INSERT INTO &quot;alumno&quot; VALUES (11,'Carlos Ortiz','1990-07-01','Avenida 234, Ciudad Juarez','656-1234','carlosortiz@example.com');
+INSERT INTO &quot;alumno&quot; VALUES (12,'Fernanda Flores','1989-12-03','Colonia 567, Mérida','999-5678','fernandaflores@example.com');
+INSERT INTO &quot;alumno&quot; VALUES (13,'Yago Perez','1997-03-12','Calle 123, San Felipe','555-1234','yagoperez@example.com');
+INSERT INTO &quot;alumno&quot; VALUES (14,'Mario Garcia','2000-05-21','Calle 456, Granada','333-5678','mariogarcia@example.com');
+INSERT INTO &quot;alumno&quot; VALUES (15,'Diego Lopez','2002-11-05','Calle 789, Perez','444-9012','diagolopez@example.com');
+INSERT INTO &quot;alumno&quot; VALUES (16,'Nestor Ramirez','2000-08-27','Calle 321, San Antonio','222-3456','nestorramirez@example.com');
+INSERT INTO &quot;alumno&quot; VALUES (17,'Lucia Gomez','1999-12-25','Calle 456, Francisco','744-5678','luciaogomez@example.com');
+INSERT INTO &quot;alumno&quot; VALUES (18,'Beni Martinez','2004-06-29','Calle 789, Helado','951-9012','benimartinez@example.com');
+INSERT INTO &quot;alumno&quot; VALUES (19,'Alicia Castro','2000-09-08','Calle 123, Manzana','229-3456','aliciacastro@example.com');
+INSERT INTO &quot;alumno&quot; VALUES (20,'Alba Rodriguez','2005-04-15','Calle 789, Ascaso','722-7890','albarodriguez@example.com');
+INSERT INTO &quot;matricula&quot; VALUES (1,1,2022,'completa',5000.0);
+INSERT INTO &quot;matricula&quot; VALUES (2,2,2022,'parcial',3000.0);
+INSERT INTO &quot;matricula&quot; VALUES (3,3,2022,'anulada',0.0);
+INSERT INTO &quot;matricula&quot; VALUES (4,4,2022,'completa',5000.0);
+INSERT INTO &quot;matricula&quot; VALUES (5,5,2022,'completa',5000.0);
+INSERT INTO &quot;matricula&quot; VALUES (6,6,2022,'parcial',3000.0);
+INSERT INTO &quot;matricula&quot; VALUES (7,7,2022,'anulada',0.0);
+INSERT INTO &quot;matricula&quot; VALUES (8,8,2022,'completa',5000.0);
+INSERT INTO &quot;matricula&quot; VALUES (9,9,2022,'completa',5000.0);
+INSERT INTO &quot;matricula&quot; VALUES (10,10,2022,'parcial',3000.0);
+INSERT INTO &quot;matricula&quot; VALUES (11,11,2022,'anulada',0.0);
+INSERT INTO &quot;matricula&quot; VALUES (12,12,2022,'completa',5000.0);
+INSERT INTO &quot;matricula&quot; VALUES (13,13,2022,'parcial',3000.0);
+INSERT INTO &quot;matricula&quot; VALUES (14,14,2022,'completa',5000.0);
+INSERT INTO &quot;matricula&quot; VALUES (15,15,2022,'completa',5000.0);
+INSERT INTO &quot;matricula&quot; VALUES (16,16,2022,'parcial',3000.0);
+INSERT INTO &quot;matricula&quot; VALUES (17,17,2022,'anulada',0.0);
+INSERT INTO &quot;matricula&quot; VALUES (18,18,2022,'completa',5000.0);
+INSERT INTO &quot;matricula&quot; VALUES (19,19,2022,'parcial',3500.0);
+INSERT INTO &quot;matricula&quot; VALUES (20,20,2022,'anulada',0.0);
+COMMIT;
+</sql><current_tab id="0"/></tab_sql></sqlb_project>
